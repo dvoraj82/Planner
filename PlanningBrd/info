@@ -1,0 +1,30 @@
+http://127.0.0.1:8000/tasks
+http://127.0.0.1:8000/admin
+
+venv/bin/activate
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+pkill -f "python manage.py runserver"
+
+username: user
+password: heslo
+
+CO OPRAVIT:
+
+vyskakovací okno je upraveno, tak jak bych rád. (jen zatmavení na celou stránku se musí někdy opravit)
+přístě bych opravil a předělal práci s kalednářem (detail kliknutím na projekt) na něco víc
+třeba, že když člověk klikne, tak mu to vyhodí tabulku o projektu (jak to už bylo) a přidam tam, možnost, úpravy, a mazání
+
+
+CO DÁL:
+
+možnost upravy všeho!!!! (work in progress)
+přidat možnost skoku na úpravy kliknutím na věci v kalendáři
+dodělat strukturu
+předělat vzhled kalendáře
+změnit, funkci priority (a vytvořit)
+víc promakat jak, bude fungovat celý kalendář
+
+opravit to, že když jsem přihlášenej na normální stránce, že pak můžu na admina bez přihlášení, když bych se tam neměl dostat (jenom admin ano)
