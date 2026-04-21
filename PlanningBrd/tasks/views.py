@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .models import Task, Project, Calendar, Tag, UserSettings
-from .forms import TaskForm, ProjectForm, CalendarForm, UserSettingsForm
+from .models import Task, Project, Calendar, Tag, UserSettings, Todo
+from .forms import TaskForm, ProjectForm, CalendarForm, UserSettingsForm, TodoForm
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 import json
@@ -82,6 +82,9 @@ def dashboard(request):
     total_tasks = Task.objects.filter(user=user).count()
     completed_tasks = Task.objects.filter(user=user, completed=True).count()
     pending_tasks = total_tasks - completed_tasks
+    total_todos = Todo.objects.filter(user=user).count()
+    completed_todos = Todo.objects.filter(user=user, completed=True).count()
+    pending_todos = total_todos - completed_todos
 
     # Nedávné úkoly (posledních 7 dní)
     week_ago = timezone.now() - timedelta(days=7)
@@ -96,6 +99,12 @@ def dashboard(request):
         date=date.today()
     ).order_by('start_time')
 
+    # Dnešní Todo
+    today_todos = Todo.objects.filter(
+        user=user,
+        due_date=date.today()
+    ).order_by('created_at')
+
     # Nadcházející projekty
     upcoming_projects = Project.objects.filter(
         user=user,
@@ -108,9 +117,13 @@ def dashboard(request):
         'total_tasks': total_tasks,
         'completed_tasks': completed_tasks,
         'pending_tasks': pending_tasks,
+        'total_todos': total_todos,
+        'completed_todos': completed_todos,
+        'pending_todos': pending_todos,
         'recent_tasks': recent_tasks,
         'today_tasks': today_tasks,
         'upcoming_projects': upcoming_projects,
+        'today_todos': today_todos,
     }
 
     return render(request, "tasks/dashboard.html", context)
@@ -433,3 +446,47 @@ def delete_project(request, pk):
 def home(request):
     calendar, created = Calendar.objects.get_or_create(user=request.user)
     return render(request, "tasks/home.html", {"calendar": calendar})
+@login_required
+def todo_list(request):
+    todos = Todo.objects.filter(user=request.user).order_by('due_date')
+    return render(request, 'tasks/todo_list.html', {'todos': todos})
+
+@login_required
+def create_todo(request):
+    if request.method == 'POST':
+        form = TodoForm(request.POST)
+        if form.is_valid():
+            todo = form.save(commit=False)
+            todo.user = request.user
+            todo.save()
+            return redirect('tasks:todo_list')
+    else:
+        form = TodoForm()
+    return render(request, 'tasks/create_todo.html', {'form': form})
+
+@login_required
+def edit_todo(request, pk):
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = TodoForm(request.POST, instance=todo)
+        if form.is_valid():
+            form.save()
+            return redirect('tasks:todo_list')
+    else:
+        form = TodoForm(instance=todo)
+    return render(request, 'tasks/edit_todo.html', {'form': form, 'todo': todo})
+
+@login_required
+def delete_todo(request, pk):
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
+    if request.method == 'POST':
+        todo.delete()
+        return redirect('tasks:todo_list')
+    return render(request, 'tasks/delete_todo.html', {'todo': todo})
+
+@login_required
+def toggle_todo_completed(request, pk):
+    todo = get_object_or_404(Todo, pk=pk, user=request.user)
+    todo.completed = not todo.completed
+    todo.save()
+    return redirect('tasks:todo_list')

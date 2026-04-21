@@ -1,5 +1,5 @@
 from django import forms
-from .models import Task, Project, Calendar, Tag, UserSettings
+from .models import Task, Project, Calendar, Tag, UserSettings, Todo
 
 
 class CalendarForm(forms.ModelForm):
@@ -54,3 +54,11 @@ class TaskForm(forms.ModelForm):
             self.fields['project'].label = "Projekt"
         if self.instance and self.instance.pk:
             self.fields['tag_names'].initial = ", ".join(self.instance.tags.values_list("name", flat=True))
+
+class TodoForm(forms.ModelForm):
+    class Meta:
+        model = Todo
+        fields = ["title", "description", "due_date", "completed"]
+        widgets = {
+            "due_date": forms.DateInput(attrs={"type": "date"}),
+        }

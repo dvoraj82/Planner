@@ -128,35 +128,17 @@
 </head>
 <body>
     <div class="sidebar">
-        <div class="logo">📅 Planner</div>
+        <div class="logo">Planning Board</div>
         <div class="subtitle">Osobní plánovač</div>
 
         <nav>
-            <a href="{% url 'tasks:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">🏠 Dashboard</a>
-            <a href="{% url 'tasks:calendar_view' %}" class="{% if request.resolver_match.url_name == 'calendar_view' %}active{% endif %}">📅 Kalendář</a>
-            <a href="{% url 'tasks:project_list' %}" class="{% if request.resolver_match.url_name == 'project_list' %}active{% endif %}">📋 Projekty</a>
-            <a href="{% url 'tasks:task_list' %}" class="{% if request.resolver_match.url_name == 'task_list' %}active{% endif %}">📝 Úkoly</a>
+            <a href="{% url 'tasks:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+            <a href="{% url 'tasks:calendar_view' %}" class="{% if request.resolver_match.url_name == 'calendar_view' %}active{% endif %}">Kalendář</a>
+            <a href="{% url 'tasks:project_list' %}" class="{% if request.resolver_match.url_name == 'project_list' %}active{% endif %}">Projekty</a>
+            <a href="{% url 'tasks:task_list' %}" class="{% if request.resolver_match.url_name == 'task_list' %}active{% endif %}">Úkoly</a>
+            <a href="{% url 'tasks:todo_list' %}" class="{% if request.resolver_match.url_name == 'todo_list' %}active{% endif %}">To do</a>
             <a href="{% url 'tasks:user_settings' %}" class="{% if request.resolver_match.url_name == 'user_settings' %}active{% endif %}">⚙️ Nastavení</a>
-            <a href="{% url 'admin:index' %}">🛠️ Admin</a>
-        </nav>
-    </div>
-
-    </div>
-</body>
-</html>
-
-<body>
-
-<div></div>
-    <div class="sidebar">
-        <h2>Planning board</h2>
-
-        <nav>
-            <a href="{% url 'tasks:dashboard' %}">📊 Dashboard</a>
-            <a href="{% url 'tasks:calendar_view' %}">📅 Kalendář</a>
-            <a href="{% url 'tasks:project_list' %}">📁 Projekty</a>
-            <a href="{% url 'tasks:task_list' %}">✅ Úkoly</a>
-            <a href="{% url 'admin:index' %}">⚙️ Admin</a>
+            <a href="{% url 'admin:index' %}">Admin</a>
         </nav>
     </div>
 

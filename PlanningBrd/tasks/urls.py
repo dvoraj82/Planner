@@ -24,5 +24,10 @@ urlpatterns = [
 
     path("calendar-view/", views.calendar_view, name="calendar_view"),
     path("calendar-events/", views.calendar_events, name="calendar_events"),
+    path("todos/", views.todo_list, name="todo_list"),
+    path("todos/create/", views.create_todo, name="create_todo"),
+    path("todos/<int:pk>/edit/", views.edit_todo, name="edit_todo"),
+    path("todos/<int:pk>/delete/", views.delete_todo, name="delete_todo"),
+    path("todos/<int:pk>/toggle/", views.toggle_todo_completed, name="toggle_todo_completed"),
 
 ]
